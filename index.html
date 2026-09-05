@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
 
 <title>دستیار خرید آرایشی</title>
 
 <link rel="manifest" href="manifest.json">
+
 <meta name="theme-color" content="#7c3aed">
 
 <style>
+
 *{
     box-sizing:border-box;
 }
@@ -36,7 +41,17 @@ h1{
 .subtitle{
     text-align:center;
     color:#666;
-    margin-bottom:20px;
+    margin-bottom:15px;
+}
+
+.days{
+    background:#ede9fe;
+    color:#5b21b6;
+    padding:12px;
+    border-radius:12px;
+    text-align:center;
+    font-weight:bold;
+    margin-bottom:15px;
 }
 
 .card{
@@ -54,7 +69,8 @@ label{
     font-weight:bold;
 }
 
-input,select{
+input,
+select{
     width:100%;
     padding:12px;
     border:1px solid #ddd;
@@ -70,7 +86,6 @@ button{
     margin-top:15px;
     font-size:16px;
     font-weight:bold;
-    cursor:pointer;
 }
 
 .primary{
@@ -125,10 +140,21 @@ button{
     margin-top:10px;
 }
 
+.small{
+    font-size:13px;
+    color:#777;
+}
+
+hr{
+    border:0;
+    border-top:1px solid #eee;
+    margin:18px 0;
+}
+
 .lock{
     position:fixed;
     inset:0;
-    background:rgba(0,0,0,.75);
+    background:rgba(0,0,0,.78);
     display:none;
     align-items:center;
     justify-content:center;
@@ -145,29 +171,16 @@ button{
     width:100%;
 }
 
-.days{
-    text-align:center;
-    font-weight:bold;
-    color:#6d28d9;
-    margin:10px 0;
-}
-
-.small{
-    font-size:13px;
-    color:#777;
-}
-
-hr{
-    border:0;
-    border-top:1px solid #eee;
-    margin:18px 0;
-}
 </style>
+
 </head>
+
 
 <body>
 
+
 <div class="container">
+
 
 <h1>🛍️ دستیار خرید آرایشی</h1>
 
@@ -175,100 +188,218 @@ hr{
 کمک به فروشگاه برای تشخیص اینکه چه محصولی را بخرد
 </div>
 
-<div class="days" id="trialText"></div>
+
+<div class="days" id="trialText">
+
+⏳ در حال بررسی دوره آزمایشی...
+
+</div>
+
+
+
+<!-- ثبت درخواست -->
 
 <div class="card">
 
 <h3>➕ ثبت درخواست مشتری</h3>
 
-<label>نام محصول</label>
-<input id="product" placeholder="مثلاً ضدآفتاب">
 
-<label>برند</label>
-<input id="brand" placeholder="مثلاً لافارر">
+<label>
+نام محصول
+</label>
 
-<label>تعداد مشتری</label>
-<input id="customers" type="number" min="1" placeholder="مثلاً 8">
+<input
+id="product"
+placeholder="مثلاً ضدآفتاب"
+>
 
-<label>سود هر عدد (تومان)</label>
-<input id="profit" type="number" min="0" placeholder="مثلاً 250000">
 
-<label>نتیجه درخواست</label>
+
+<label>
+برند
+</label>
+
+<input
+id="brand"
+placeholder="مثلاً لافارر"
+>
+
+
+
+<label>
+تعداد مشتری
+</label>
+
+<input
+id="customers"
+type="number"
+min="1"
+placeholder="مثلاً 8"
+>
+
+
+
+<label>
+سود هر عدد (تومان)
+</label>
+
+<input
+id="profit"
+type="number"
+min="0"
+placeholder="مثلاً 250000"
+>
+
+
+
+<label>
+نتیجه درخواست
+</label>
+
 <select id="reason">
-<option value="missing">مشتری قصد خرید داشت ولی موجود نبود</option>
-<option value="alternative">محصول جایگزین خرید</option>
-<option value="question">فقط پرس‌وجو کرد</option>
+
+<option value="missing">
+مشتری قصد خرید داشت ولی موجود نبود
+</option>
+
+<option value="alternative">
+محصول جایگزین خرید
+</option>
+
+<option value="question">
+فقط پرس‌وجو کرد
+</option>
+
 </select>
 
-<button class="primary" onclick="addRequest()">
+
+
+<button
+class="primary"
+onclick="addRequest()"
+>
+
 ثبت درخواست
+
 </button>
 
 </div>
 
 
+
+<!-- آمار -->
+
 <div class="card">
 
 <h3>📊 آمار کلی</h3>
 
-<div class="stat">
-<span>کل درخواست‌ها</span>
-<strong id="totalRequests">0</strong>
-</div>
 
 <div class="stat">
-<span>مشتریان جدی</span>
-<strong id="seriousRequests">0</strong>
+
+<span>
+کل درخواست‌ها
+</span>
+
+<strong id="totalRequests">
+0
+</strong>
+
 </div>
+
 
 <div class="stat">
-<span>محصولات ثبت‌شده</span>
-<strong id="productCount">0</strong>
-</div>
+
+<span>
+مشتریان جدی
+</span>
+
+<strong id="seriousRequests">
+0
+</strong>
 
 </div>
 
+
+<div class="stat">
+
+<span>
+محصولات ثبت‌شده
+</span>
+
+<strong id="productCount">
+0
+</strong>
+
+</div>
+
+</div>
+
+
+
+<!-- پیشنهاد -->
 
 <div class="card">
 
 <h3>🧠 پیشنهاد خرید</h3>
 
 <div id="recommendation">
+
 هنوز اطلاعات کافی ثبت نشده است.
-</div>
 
 </div>
 
+</div>
+
+
+
+<!-- محصولات -->
 
 <div class="card">
 
-<h3>📦 محصولات و نتیجه خرید</h3>
+<h3>
+📦 محصولات و نتیجه خرید
+</h3>
 
 <div id="productsList">
+
 هنوز محصولی ثبت نشده است.
+
 </div>
 
 </div>
+
 
 
 <div class="card">
 
-<button class="secondary" onclick="clearData()">
+<button
+class="danger"
+onclick="clearData()"
+>
+
 پاک کردن همه اطلاعات
+
 </button>
 
 </div>
 
+
 </div>
 
 
-<!-- صفحه قفل -->
 
-<div class="lock" id="lockScreen">
+<!-- قفل -->
+
+<div
+class="lock"
+id="lockScreen"
+>
 
 <div class="lockBox">
 
-<h2>🔒 دوره آزمایشی تمام شد</h2>
+<h2>
+🔒 دوره آزمایشی تمام شد
+</h2>
 
 <p>
 دوره آزمایشی ۷ روزه شما به پایان رسیده است.
@@ -289,25 +420,39 @@ hr{
 </div>
 
 
+
 <script>
+
+
+/* =========================
+   تنظیمات
+========================= */
 
 const TRIAL_DAYS = 7;
 
-const DATA_KEY = "beautyAssistantData";
-const START_KEY = "beautyAssistantStartDate";
+const DATA_KEY =
+"beautyAssistantData";
+
+const START_KEY =
+"beautyAssistantStartDate";
 
 
-/* -------------------------
-   شروع دوره آزمایشی
-------------------------- */
+
+/* =========================
+   شروع دوره
+========================= */
 
 function startTrial(){
 
-    let start = localStorage.getItem(START_KEY);
+    let start =
+        localStorage.getItem(
+            START_KEY
+        );
 
     if(!start){
 
-        start = new Date().toISOString();
+        start =
+            new Date().toISOString();
 
         localStorage.setItem(
             START_KEY,
@@ -316,146 +461,236 @@ function startTrial(){
     }
 
     return new Date(start);
+
 }
 
 
-/* -------------------------
-   بررسی ۷ روز
-------------------------- */
+
+/* =========================
+   بررسی دوره آزمایشی
+========================= */
 
 function checkTrial(){
 
-    const start = startTrial();
+    const start =
+        startTrial();
 
-    const now = new Date();
+    const now =
+        new Date();
 
     const difference =
-        now.getTime() - start.getTime();
+        now.getTime() -
+        start.getTime();
 
-    const daysPassed =
-        Math.floor(
-            difference /
-            (1000 * 60 * 60 * 24)
-        );
+    const totalDays =
+        difference /
+        (1000 * 60 * 60 * 24);
 
     const remaining =
-        TRIAL_DAYS - daysPassed;
+        TRIAL_DAYS -
+        totalDays;
+
 
     const trialText =
-        document.getElementById("trialText");
+        document.getElementById(
+            "trialText"
+        );
+
 
     if(remaining > 0){
 
-        trialText.innerHTML =
-            "⏳ " +
-            remaining +
-            " روز از دوره آزمایشی باقی مانده";
+        const days =
+            Math.floor(
+                remaining
+            );
 
-    }else{
+        const hours =
+            Math.floor(
+                (remaining - days) * 24
+            );
+
 
         trialText.innerHTML =
-            "🔒 دوره آزمایشی تمام شده";
+            "⏳ دوره آزمایشی: " +
+            days +
+            " روز و " +
+            hours +
+            " ساعت باقی مانده";
+
+    }
+
+    else{
+
+        trialText.innerHTML =
+            "🔒 دوره آزمایشی ۷ روزه تمام شده است";
+
 
         document.getElementById(
             "lockScreen"
-        ).style.display = "flex";
+        ).style.display =
+            "flex";
 
-        document.body.style.overflow = "hidden";
+
+        document.body.style.overflow =
+            "hidden";
+
     }
+
 }
 
 
-/* -------------------------
-   اطلاعات
-------------------------- */
+
+/* =========================
+   گرفتن اطلاعات
+========================= */
 
 function getData(){
 
     return JSON.parse(
-        localStorage.getItem(DATA_KEY) || "[]"
+
+        localStorage.getItem(
+            DATA_KEY
+        ) || "[]"
+
     );
 
 }
+
+
+
+/* =========================
+   ذخیره اطلاعات
+========================= */
 
 function saveData(data){
 
     localStorage.setItem(
+
         DATA_KEY,
+
         JSON.stringify(data)
+
     );
 
 }
 
 
-/* -------------------------
+
+/* =========================
    ثبت درخواست
-------------------------- */
+========================= */
 
 function addRequest(){
 
+
     const product =
-        document.getElementById("product").value.trim();
+        document
+        .getElementById("product")
+        .value
+        .trim();
+
 
     const brand =
-        document.getElementById("brand").value.trim();
+        document
+        .getElementById("brand")
+        .value
+        .trim();
+
 
     const customers =
         Number(
-            document.getElementById("customers").value
+            document
+            .getElementById("customers")
+            .value
         );
+
 
     const profit =
         Number(
-            document.getElementById("profit").value
+            document
+            .getElementById("profit")
+            .value
         );
 
+
     const reason =
-        document.getElementById("reason").value;
+        document
+        .getElementById("reason")
+        .value;
 
 
-    if(!product || customers <= 0){
 
-        alert("لطفاً نام محصول و تعداد مشتری را وارد کنید.");
+    if(
+        !product ||
+        customers <= 0
+    ){
+
+        alert(
+            "لطفاً نام محصول و تعداد مشتری را وارد کنید."
+        );
 
         return;
+
     }
 
 
-    const data = getData();
+
+    const data =
+        getData();
+
 
 
     data.push({
 
-        id: Date.now(),
+        id:Date.now(),
 
-        product: product,
+        product:product,
 
-        brand: brand,
+        brand:brand,
 
-        customers: customers,
+        customers:customers,
 
-        profit: profit,
+        profit:profit,
 
-        reason: reason,
+        reason:reason,
 
-        purchaseQty: 0,
+        purchaseQty:0,
 
-        soldQty: 0,
+        soldQty:0,
 
-        purchased: false,
+        purchased:false,
 
-        date: new Date().toLocaleDateString("fa-IR")
+        date:
+        new Date()
+        .toLocaleDateString("fa-IR")
 
     });
+
 
 
     saveData(data);
 
 
-    document.getElementById("product").value = "";
-    document.getElementById("brand").value = "";
-    document.getElementById("customers").value = "";
-    document.getElementById("profit").value = "";
+
+    document
+    .getElementById("product")
+    .value = "";
+
+
+    document
+    .getElementById("brand")
+    .value = "";
+
+
+    document
+    .getElementById("customers")
+    .value = "";
+
+
+    document
+    .getElementById("profit")
+    .value = "";
+
 
 
     updateApp();
@@ -463,21 +698,30 @@ function addRequest(){
 }
 
 
-/* -------------------------
+
+/* =========================
    تحلیل محصولات
-------------------------- */
+========================= */
 
 function analyzeProducts(){
 
-    const data = getData();
+
+    const data =
+        getData();
+
 
     const groups = {};
 
 
+
     data.forEach(item => {
 
+
         const key =
-            item.product.trim().toLowerCase();
+            item.product
+            .trim()
+            .toLowerCase();
+
 
 
         if(!groups[key]){
@@ -505,86 +749,135 @@ function analyzeProducts(){
         }
 
 
-        groups[key].requests += item.customers;
+
+        groups[key].requests +=
+            Number(item.customers || 0);
 
 
-        if(item.reason === "missing"){
 
-            groups[key].serious += item.customers;
+        if(
+            item.reason ===
+            "missing"
+        ){
+
+            groups[key].serious +=
+                Number(
+                    item.customers || 0
+                );
 
         }
 
 
-        groups[key].profit =
-            item.profit || groups[key].profit;
+
+        if(item.profit){
+
+            groups[key].profit =
+                item.profit;
+
+        }
+
 
 
         if(item.purchased){
 
-            groups[key].purchased = true;
+            groups[key].purchased =
+                true;
+
 
             groups[key].purchaseQty +=
-                Number(item.purchaseQty || 0);
+                Number(
+                    item.purchaseQty || 0
+                );
+
 
             groups[key].soldQty +=
-                Number(item.soldQty || 0);
+                Number(
+                    item.soldQty || 0
+                );
 
         }
 
     });
 
 
-    return Object.values(groups);
+
+    return Object.values(
+        groups
+    );
 
 }
 
 
-/* -------------------------
+
+/* =========================
    پیشنهاد خرید
-------------------------- */
+========================= */
 
 function getRecommendation(){
+
 
     const products =
         analyzeProducts();
 
 
-    if(products.length === 0){
 
+    const box =
         document.getElementById(
             "recommendation"
-        ).innerHTML =
-        "هنوز اطلاعات کافی ثبت نشده است.";
+        );
+
+
+
+    if(
+        products.length === 0
+    ){
+
+        box.innerHTML =
+            "هنوز اطلاعات کافی ثبت نشده است.";
 
         return;
 
     }
 
 
+
     products.sort(
+
         (a,b) =>
+
         (b.serious * b.profit) -
+
         (a.serious * a.profit)
+
     );
 
 
-    const best = products[0];
+
+    const best =
+        products[0];
 
 
-    if(best.serious >= 10){
+
+    if(
+        best.serious >= 10
+    ){
+
 
         const qty =
             Math.max(
+
                 1,
-                Math.ceil(best.serious * 0.6)
+
+                Math.ceil(
+                    best.serious * 0.6
+                )
+
             );
 
 
-        document.getElementById(
-            "recommendation"
-        ).innerHTML =
 
-        `
+        box.innerHTML = `
+
         <div class="good">
         🟢 پیشنهاد خرید
         </div>
@@ -594,38 +887,53 @@ function getRecommendation(){
         </h3>
 
         <p>
-        تعداد درخواست جدی:
-        <strong>${best.serious}</strong>
+        درخواست جدی:
+        <strong>
+        ${best.serious}
+        </strong>
         </p>
 
         <p>
-        سود احتمالی هر عدد:
-        <strong>${best.profit.toLocaleString()} تومان</strong>
+        سود هر عدد:
+        <strong>
+        ${Number(best.profit)
+        .toLocaleString()}
+        تومان
+        </strong>
         </p>
 
         <p>
         مقدار پیشنهادی خرید:
-        <strong>${qty} عدد</strong>
+        <strong>
+        ${qty} عدد
+        </strong>
         </p>
 
         `;
 
     }
 
-    else if(best.serious >= 5){
+
+    else if(
+        best.serious >= 5
+    ){
+
 
         const qty =
             Math.max(
+
                 1,
-                Math.ceil(best.serious * 0.4)
+
+                Math.ceil(
+                    best.serious * 0.4
+                )
+
             );
 
 
-        document.getElementById(
-            "recommendation"
-        ).innerHTML =
 
-        `
+        box.innerHTML = `
+
         <div class="warning">
         🟡 خرید با احتیاط
         </div>
@@ -636,33 +944,40 @@ function getRecommendation(){
 
         <p>
         درخواست جدی:
-        <strong>${best.serious}</strong>
+        <strong>
+        ${best.serious}
+        </strong>
         </p>
 
         <p>
         مقدار پیشنهادی:
-        <strong>${qty} عدد</strong>
+        <strong>
+        ${qty} عدد
+        </strong>
         </p>
 
         `;
 
     }
 
+
     else{
 
-        document.getElementById(
-            "recommendation"
-        ).innerHTML =
 
-        `
+        box.innerHTML = `
+
         <div class="bad">
         🔴 فعلاً خرید نکن
         </div>
 
         <p>
-        برای ${best.product}
+        برای محصول
+        <strong>
+        ${best.product}
+        </strong>
         تقاضای کافی ثبت نشده است.
         </p>
+
         `;
 
     }
@@ -670,11 +985,13 @@ function getRecommendation(){
 }
 
 
-/* -------------------------
+
+/* =========================
    نمایش محصولات
-------------------------- */
+========================= */
 
 function showProducts(){
+
 
     const products =
         analyzeProducts();
@@ -686,76 +1003,110 @@ function showProducts(){
         );
 
 
-    if(products.length === 0){
+
+    if(
+        products.length === 0
+    ){
 
         box.innerHTML =
-        "هنوز محصولی ثبت نشده است.";
+            "هنوز محصولی ثبت نشده است.";
 
         return;
 
     }
 
 
+
     box.innerHTML = "";
 
 
-    products.forEach(product => {
+
+    products.forEach(
+        product => {
+
 
         const div =
-            document.createElement("div");
+            document.createElement(
+                "div"
+            );
 
-        div.className = "product";
+
+        div.className =
+            "product";
+
 
 
         let status = "";
 
 
-        if(product.purchased){
+
+        if(
+            product.purchased
+        ){
+
 
             const percentage =
                 product.purchaseQty > 0
+
                 ?
+
                 Math.round(
+
                     product.soldQty /
                     product.purchaseQty *
                     100
+
                 )
+
                 :
+
                 0;
+
 
 
             status = `
 
             <hr>
 
-            <b>📦 نتیجه خرید</b>
+            <b>
+            📦 نتیجه خرید
+            </b>
 
             <p>
             خرید:
-            ${product.purchaseQty} عدد
+            ${product.purchaseQty}
+            عدد
             </p>
 
             <p>
             فروش:
-            ${product.soldQty} عدد
+            ${product.soldQty}
+            عدد
             </p>
 
             <p>
             درصد فروش:
-            <strong>${percentage}%</strong>
+            <strong>
+            ${percentage}%
+            </strong>
             </p>
 
             ${
                 percentage >= 70
+
                 ?
-                '<div class="good">✅ تقاضا واقعی بوده</div>'
+
+                '<div class="good">✅ تقاضای واقعی تأیید شد</div>'
+
                 :
+
                 '<div class="warning">⚠️ فروش کمتر از انتظار بوده</div>'
             }
 
             `;
 
         }
+
 
 
         div.innerHTML = `
@@ -766,54 +1117,61 @@ function showProducts(){
 
         ${
             product.brand
+
             ?
-            `<div>برند: ${product.brand}</div>`
+
+            `<div>
+            برند:
+            ${product.brand}
+            </div>`
+
             :
+
             ""
         }
 
         <p>
         درخواست جدی:
-        <strong>${product.serious}</strong>
+        <strong>
+        ${product.serious}
+        </strong>
         </p>
+
 
         <button
         class="secondary"
         onclick="recordPurchase('${escapeValue(product.product)}')"
         >
+
         🛒 ثبت خرید و فروش
+
         </button>
+
 
         ${status}
 
         `;
 
 
-        box.appendChild(div);
+
+        box.appendChild(
+            div
+        );
+
 
     });
 
 }
 
 
-/* -------------------------
-   ثبت خرید واقعی
-------------------------- */
 
-function recordPurchase(productName){
+/* =========================
+   ثبت خرید و فروش
+========================= */
 
-    const data =
-        getData().filter(
-            x =>
-            x.product === productName
-        );
-
-
-    if(data.length === 0){
-
-        return;
-
-    }
+function recordPurchase(
+    productName
+){
 
 
     const quantity =
@@ -822,15 +1180,20 @@ function recordPurchase(productName){
         );
 
 
-    if(quantity === null){
+
+    if(
+        quantity === null
+    ){
 
         return;
 
     }
 
 
+
     const purchaseQty =
         Number(quantity);
+
 
 
     if(
@@ -838,11 +1201,14 @@ function recordPurchase(productName){
         purchaseQty <= 0
     ){
 
-        alert("تعداد خرید معتبر نیست.");
+        alert(
+            "تعداد خرید معتبر نیست."
+        );
 
         return;
 
     }
+
 
 
     const sold =
@@ -851,15 +1217,20 @@ function recordPurchase(productName){
         );
 
 
-    if(sold === null){
+
+    if(
+        sold === null
+    ){
 
         return;
 
     }
 
 
+
     const soldQty =
         Number(sold);
+
 
 
     if(
@@ -876,35 +1247,22 @@ function recordPurchase(productName){
     }
 
 
-    data.forEach(item => {
 
-        if(item.product === productName){
-
-            item.purchased = true;
-
-            item.purchaseQty =
-                purchaseQty;
-
-            item.soldQty =
-                soldQty;
-
-        }
-
-    });
+    const data =
+        getData();
 
 
-    /*
-       چون data بالا فقط فیلتر شده است،
-       دوباره اطلاعات اصلی را اصلاح می‌کنیم.
-    */
 
-    const allData = getData();
+    data.forEach(
+        item => {
 
-    allData.forEach(item => {
+        if(
+            item.product ===
+            productName
+        ){
 
-        if(item.product === productName){
-
-            item.purchased = true;
+            item.purchased =
+                true;
 
             item.purchaseQty =
                 purchaseQty;
@@ -917,16 +1275,19 @@ function recordPurchase(productName){
     });
 
 
-    saveData(allData);
+
+    saveData(data);
+
 
     updateApp();
 
 }
 
 
-/* -------------------------
-   Escape
-------------------------- */
+
+/* =========================
+   جلوگیری از مشکل علامت '
+========================= */
 
 function escapeValue(value){
 
@@ -937,11 +1298,13 @@ function escapeValue(value){
 }
 
 
-/* -------------------------
+
+/* =========================
    آمار
-------------------------- */
+========================= */
 
 function updateStats(){
+
 
     const data =
         getData();
@@ -952,47 +1315,71 @@ function updateStats(){
     let serious = 0;
 
 
-    data.forEach(item => {
+
+    data.forEach(
+        item => {
+
 
         total +=
-            Number(item.customers || 0);
+            Number(
+                item.customers || 0
+            );
 
 
-        if(item.reason === "missing"){
+
+        if(
+            item.reason ===
+            "missing"
+        ){
 
             serious +=
-                Number(item.customers || 0);
+                Number(
+                    item.customers || 0
+                );
 
         }
 
     });
 
 
+
     const products =
         analyzeProducts();
 
 
-    document.getElementById(
+
+    document
+    .getElementById(
         "totalRequests"
-    ).innerText = total;
+    )
+    .innerText =
+        total;
 
 
-    document.getElementById(
+
+    document
+    .getElementById(
         "seriousRequests"
-    ).innerText = serious;
+    )
+    .innerText =
+        serious;
 
 
-    document.getElementById(
+
+    document
+    .getElementById(
         "productCount"
-    ).innerText =
+    )
+    .innerText =
         products.length;
 
 }
 
 
-/* -------------------------
+
+/* =========================
    بروزرسانی
-------------------------- */
+========================= */
 
 function updateApp(){
 
@@ -1005,11 +1392,13 @@ function updateApp(){
 }
 
 
-/* -------------------------
+
+/* =========================
    پاک کردن اطلاعات
-------------------------- */
+========================= */
 
 function clearData(){
+
 
     if(
         confirm(
@@ -1017,7 +1406,9 @@ function clearData(){
         )
     ){
 
-        localStorage.removeItem(DATA_KEY);
+        localStorage.removeItem(
+            DATA_KEY
+        );
 
         updateApp();
 
@@ -1026,18 +1417,20 @@ function clearData(){
 }
 
 
-/* -------------------------
-   شروع برنامه
-------------------------- */
+
+/* =========================
+   شروع
+========================= */
 
 checkTrial();
 
 updateApp();
 
 
-/* -------------------------
+
+/* =========================
    Service Worker
-------------------------- */
+========================= */
 
 if(
     "serviceWorker" in navigator
