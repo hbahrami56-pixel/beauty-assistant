@@ -1,4 +1,4 @@
-const CACHE_NAME = "beauty-assistant-v1";
+const CACHE_NAME = "beauty-assistant-v2";
 
 const FILES = [
     "./",
@@ -6,29 +6,68 @@ const FILES = [
     "./manifest.json"
 ];
 
-self.addEventListener("install", function(event) {
-
+// نصب نسخه جدید
+self.addEventListener("install", event => {
     event.waitUntil(
         caches.open(CACHE_NAME)
-        .then(function(cache) {
-            return cache.addAll(FILES);
-        })
+            .then(cache => cache.addAll(FILES))
     );
 
+    self.skipWaiting();
 });
 
-
-self.addEventListener("fetch", function(event) {
-
-    event.respondWith(
-
-        caches.match(event.request)
-        .then(function(response) {
-
-            return response || fetch(event.request);
-
+// حذف کش‌های قدیمی
+self.addEventListener("activate", event => {
+    event.waitUntil(
+        caches.keys().then(keys => {
+            return Promise.all(
+                keys
+                    .filter(key => key !== CACHE_NAME)
+                    .map(key => caches.delete(key))
+            );
         })
-
     );
 
+    self.clients.claim();
+});
+
+// دریافت فایل‌ها
+self.addEventListener("fetch", event => {
+
+    const request = event.request;
+
+    // برای صفحه اصلی همیشه اول نسخه جدید را بگیر
+    if (request.mode === "navigate") {
+
+        event.respondWith(
+            fetch(request)
+                .then(response => {
+
+                    const copy = response.clone();
+
+                    caches.open(CACHE_NAME)
+                        .then(cache => cache.put(request, copy));
+
+                    return response;
+                })
+                .catch(() => {
+                    return caches.match("./index.html");
+                })
+        );
+
+        return;
+    }
+
+    // برای فایل‌های دیگر از کش استفاده کن
+    event.respondWith(
+        caches.match(request)
+            .then(cached => {
+
+                if (cached) {
+                    return cached;
+                }
+
+                return fetch(request);
+            })
+    );
 });
