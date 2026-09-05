@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>دستیار خرید آرایشی</title>
+
+<style>
+
+body{
+    margin:0;
+    font-family:Tahoma,Arial;
+    background:#f5f3ff;
+    color:#222;
+}
+
+header{
+    background:#7c3aed;
+    color:white;
+    padding:22px 15px;
+    text-align:center;
+}
+
+header h1{
+    margin:0 0 8px;
+    font-size:22px;
+}
+
+header p{
+    margin:0;
+    font-size:13px;
+}
+
+.container{
+    max-width:650px;
+    margin:auto;
+    padding:15px;
+}
+
+.card{
+    background:white;
+    border-radius:16px;
+    padding:18px;
+    margin-bottom:15px;
+    box-shadow:0 3px 12px rgba(0,0,0,.08);
+}
+
+label{
+    display:block;
+    margin-top:12px;
+    margin-bottom:5px;
+    font-weight:bold;
+}
+
+input,select,button{
+    width:100%;
+    padding:13px;
+    border-radius:10px;
+    border:1px solid #ddd;
+    font-size:15px;
+}
+
+button{
+    background:#7c3aed;
+    color:white;
+    border:0;
+    margin-top:15px;
+    font-weight:bold;
+}
+
+.result{
+    background:#f5f3ff;
+    border-radius:12px;
+    padding:15px;
+    margin-top:15px;
+}
+
+.good{
+    color:#15803d;
+    font-weight:bold;
+}
+
+.warn{
+    color:#b45309;
+    font-weight:bold;
+}
+
+.bad{
+    color:#dc2626;
+    font-weight:bold;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:8px;
+}
+
+.stat{
+    background:#f5f3ff;
+    padding:12px 5px;
+    border-radius:10px;
+    text-align:center;
+}
+
+.stat b{
+    display:block;
+    font-size:20px;
+    color:#7c3aed;
+}
+
+.item{
+    border-bottom:1px solid #eee;
+    padding:12px 0;
+}
+
+</style>
+
+</head>
+
+<body>
+
+
+<header>
+
+<h1>🛍️ دستیار خرید آرایشی</h1>
+
+<p>
+کمکت می‌کند بفهمی چه محصولی را باید خریداری کنی
+</p>
+
+</header>
+
+
+<div class="container">
+
+
+<div class="card">
+
+<h3>📝 ثبت درخواست مشتری</h3>
+
+
+<label>نام محصول</label>
+
+<input
+id="product"
+placeholder="مثلاً ضدآفتاب">
+
+
+<label>برند</label>
+
+<input
+id="brand"
+placeholder="مثلاً لافارر">
+
+
+<label>تعداد مشتری</label>
+
+<input
+id="customers"
+type="number"
+placeholder="مثلاً 8">
+
+
+<label>سود هر عدد (تومان)</label>
+
+<input
+id="profit"
+type="number"
+placeholder="مثلاً 250000">
+
+
+<label>وضعیت درخواست</label>
+
+<select id="reason">
+
+<option value="missing">
+مشتری می‌خواست ولی محصول موجود نبود
+</option>
+
+<option value="price">
+قیمت پرسید ولی نخرید
+</option>
+
+<option value="alternative">
+محصول جایگزین خرید
+</option>
+
+<option value="justAsk">
+فقط پرس‌وجو کرد
+</option>
+
+</select>
+
+
+<button onclick="saveRequest()">
+
+ثبت درخواست مشتری
+
+</button>
+
+
+<div id="result"></div>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>📊 آمار فروشگاه</h3>
+
+
+<div class="stats">
+
+<div class="stat">
+
+<b id="total">0</b>
+
+کل درخواست‌ها
+
+</div>
+
+
+<div class="stat">
+
+<b id="serious">0</b>
+
+مشتری جدی
+
+</div>
+
+
+<div class="stat">
+
+<b id="missing">0</b>
+
+موجود نبود
+
+</div>
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>🧠 پیشنهاد خرید</h3>
+
+<div id="recommendation">
+
+هنوز اطلاعاتی ثبت نشده است.
+
+</div>
+
+</div>
+
+
+
+<div class="card">
+
+<h3>📋 درخواست‌های ثبت‌شده</h3>
+
+<div id="list">
+
+هنوز چیزی ثبت نشده است.
+
+</div>
+
+</div>
+
+
+</div>
+
+
+
+<script>
+
+
+let data =
+JSON.parse(
+localStorage.getItem("beautyData") || "[]"
+);
+
+
+
+function saveRequest(){
+
+
+let product =
+document.getElementById("product").value.trim();
+
+
+let brand =
+document.getElementById("brand").value.trim();
+
+
+let customers =
+Number(
+document.getElementById("customers").value
+);
+
+
+let profit =
+Number(
+document.getElementById("profit").value
+);
+
+
+let reason =
+document.getElementById("reason").value;
+
+
+if(!product || customers <= 0){
+
+alert(
+"نام محصول و تعداد مشتری را وارد کن."
+);
+
+return;
+
+}
+
+
+data.push({
+
+product:product,
+
+brand:brand,
+
+customers:customers,
+
+profit:profit,
+
+reason:reason,
+
+date:new Date()
+.toLocaleDateString("fa-IR")
+
+});
+
+
+localStorage.setItem(
+"beautyData",
+JSON.stringify(data)
+);
+
+
+document.getElementById("product").value="";
+
+document.getElementById("brand").value="";
+
+document.getElementById("customers").value="";
+
+document.getElementById("profit").value="";
+
+
+analyze();
+
+
+alert("درخواست ثبت شد.");
+
+}
+
+
+
+function analyze(){
+
+
+let total=0;
+
+let serious=0;
+
+let missing=0;
+
+let products={};
+
+
+data.forEach(x=>{
+
+
+total += x.customers;
+
+
+if(x.reason==="missing"){
+
+serious += x.customers;
+
+missing += x.customers;
+
+}
+
+
+let key =
+x.product+"-"+x.brand;
+
+
+if(!products[key]){
+
+products[key]={
+
+product:x.product,
+
+brand:x.brand,
+
+serious:0,
+
+profit:x.profit
+
+};
+
+}
+
+
+if(x.reason==="missing"){
+
+products[key].serious += x.customers;
+
+}
+
+
+if(x.profit>0){
+
+products[key].profit=x.profit;
+
+}
+
+});
+
+
+document.getElementById("total")
+.innerText=total;
+
+
+document.getElementById("serious")
+.innerText=serious;
+
+
+document.getElementById("missing")
+.innerText=missing;
+
+
+
+let html="";
+
+
+Object.values(products)
+.sort(
+(a,b)=>
+(b.serious*b.profit)-
+(a.serious*a.profit)
+)
+.forEach(x=>{
+
+
+if(x.serious>=10){
+
+let qty=Math.ceil(x.serious*0.6);
+
+
+html += `
+
+<div class="result">
+
+<b>${x.product}</b>
+
+${x.brand ? " - "+x.brand : ""}
+
+<p>
+
+${x.serious} مشتری جدی درخواست کرده‌اند.
+
+</p>
+
+<p class="good">
+
+✅ پیشنهاد: این محصول را تهیه کن.
+
+</p>
+
+<p>
+
+مقدار اولیه پیشنهادی:
+
+<b>${qty}</b> عدد
+
+</p>
+
+<p>
+
+سود بالقوه تقریبی:
+
+<b>
+${(x.serious*x.profit)
+.toLocaleString("fa-IR")}
+</b>
+
+تومان
+
+</p>
+
+</div>
+
+`;
+
+}
+
+
+else if(x.serious>=5){
+
+let qty=Math.ceil(x.serious*0.4);
+
+
+html += `
+
+<div class="result">
+
+<b>${x.product}</b>
+
+${x.brand ? " - "+x.brand : ""}
+
+<p>
+
+${x.serious} مشتری جدی
+
+</p>
+
+<p class="warn">
+
+⚠️ خرید محدود را بررسی کن.
+
+</p>
+
+<p>
+
+مقدار پیشنهادی:
+
+<b>${qty}</b> عدد
+
+</p>
+
+</div>
+
+`;
+
+}
+
+
+else if(x.serious>0){
+
+html += `
+
+<div class="result">
+
+<b>${x.product}</b>
+
+${x.brand ? " - "+x.brand : ""}
+
+<p>
+
+${x.serious} درخواست جدی
+
+</p>
+
+<p class="bad">
+
+❌ فعلاً خرید این محصول را پیشنهاد نمی‌کنم.
+
+</p>
+
+</div>
+
+`;
+
+}
+
+});
+
+
+if(!html){
+
+html="هنوز اطلاعات کافی برای پیشنهاد خرید وجود ندارد.";
+
+}
+
+
+document.getElementById(
+"recommendation"
+).innerHTML=html;
+
+
+renderList();
+
+}
+
+
+
+function renderList(){
+
+
+let html="";
+
+
+data
+.slice()
+.reverse()
+.forEach(x=>{
+
+html += `
+
+<div class="item">
+
+<b>
+${x.product}
+</b>
+
+${x.brand ? " - "+x.brand : ""}
+
+<br>
+
+${x.customers} مشتری
+
+<br>
+
+وضعیت:
+${reasonText(x.reason)}
+
+<br>
+
+تاریخ:
+${x.date}
+
+</div>
+
+`;
+
+});
+
+
+if(!html){
+
+html="هنوز چیزی ثبت نشده است.";
+
+}
+
+
+document.getElementById(
+"list"
+).innerHTML=html;
+
+}
+
+
+
+function reasonText(reason){
+
+if(reason==="missing")
+return "محصول موجود نبود";
+
+if(reason==="price")
+return "قیمت پرسید";
+
+if(reason==="alternative")
+return "محصول جایگزین خرید";
+
+return "فقط پرس‌وجو";
+
+}
+
+
+analyze();
+
+</script>
+
+
+</body>
+
+</html>
