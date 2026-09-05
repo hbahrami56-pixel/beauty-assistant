@@ -47,11 +47,12 @@ h1{
 .days{
     background:#ede9fe;
     color:#5b21b6;
-    padding:12px;
+    padding:14px;
     border-radius:12px;
     text-align:center;
     font-weight:bold;
     margin-bottom:15px;
+    font-size:17px;
 }
 
 .card{
@@ -101,13 +102,6 @@ button{
 .danger{
     background:#fee2e2;
     color:#b91c1c;
-}
-
-.result{
-    background:#f3f4f6;
-    border-radius:12px;
-    padding:15px;
-    margin-top:15px;
 }
 
 .good{
@@ -182,17 +176,21 @@ hr{
 <div class="container">
 
 
-<h1>🛍️ دستیار خرید آرایشی</h1>
+<h1>
+🛍️ دستیار خرید آرایشی
+</h1>
+
 
 <div class="subtitle">
 کمک به فروشگاه برای تشخیص اینکه چه محصولی را بخرد
 </div>
 
 
-<div class="days" id="trialText">
-
+<div
+class="days"
+id="trialText"
+>
 ⏳ در حال بررسی دوره آزمایشی...
-
 </div>
 
 
@@ -201,7 +199,9 @@ hr{
 
 <div class="card">
 
-<h3>➕ ثبت درخواست مشتری</h3>
+<h3>
+➕ ثبت درخواست مشتری
+</h3>
 
 
 <label>
@@ -214,7 +214,6 @@ placeholder="مثلاً ضدآفتاب"
 >
 
 
-
 <label>
 برند
 </label>
@@ -223,7 +222,6 @@ placeholder="مثلاً ضدآفتاب"
 id="brand"
 placeholder="مثلاً لافارر"
 >
-
 
 
 <label>
@@ -238,7 +236,6 @@ placeholder="مثلاً 8"
 >
 
 
-
 <label>
 سود هر عدد (تومان)
 </label>
@@ -249,7 +246,6 @@ type="number"
 min="0"
 placeholder="مثلاً 250000"
 >
-
 
 
 <label>
@@ -273,14 +269,11 @@ placeholder="مثلاً 250000"
 </select>
 
 
-
 <button
 class="primary"
 onclick="addRequest()"
 >
-
 ثبت درخواست
-
 </button>
 
 </div>
@@ -291,7 +284,9 @@ onclick="addRequest()"
 
 <div class="card">
 
-<h3>📊 آمار کلی</h3>
+<h3>
+📊 آمار کلی
+</h3>
 
 
 <div class="stat">
@@ -340,12 +335,12 @@ onclick="addRequest()"
 
 <div class="card">
 
-<h3>🧠 پیشنهاد خرید</h3>
+<h3>
+🧠 پیشنهاد خرید
+</h3>
 
 <div id="recommendation">
-
 هنوز اطلاعات کافی ثبت نشده است.
-
 </div>
 
 </div>
@@ -361,9 +356,7 @@ onclick="addRequest()"
 </h3>
 
 <div id="productsList">
-
 هنوز محصولی ثبت نشده است.
-
 </div>
 
 </div>
@@ -376,9 +369,7 @@ onclick="addRequest()"
 class="danger"
 onclick="clearData()"
 >
-
 پاک کردن همه اطلاعات
-
 </button>
 
 </div>
@@ -424,104 +415,86 @@ id="lockScreen"
 <script>
 
 
-/* =========================
-   تنظیمات
-========================= */
+/* ==================================
+   تنظیمات دوره آزمایشی
+================================== */
 
-const TRIAL_DAYS = 7;
+const TRIAL_DURATION =
+    7 * 24 * 60 * 60 * 1000;
+
+
+const TRIAL_START_KEY =
+    "beauty_trial_start_v2";
+
 
 const DATA_KEY =
-"beautyAssistantData";
-
-const START_KEY =
-"beautyAssistantStartDate";
+    "beautyAssistantData";
 
 
 
-/* =========================
-   شروع دوره
-========================= */
+/* ==================================
+   شروع دوره آزمایشی
+================================== */
 
-function startTrial(){
+function initializeTrial(){
 
     let start =
         localStorage.getItem(
-            START_KEY
+            TRIAL_START_KEY
         );
+
 
     if(!start){
 
         start =
-            new Date().toISOString();
+            Date.now();
 
         localStorage.setItem(
-            START_KEY,
-            start
+            TRIAL_START_KEY,
+            start.toString()
         );
+
     }
 
-    return new Date(start);
+
+    return Number(start);
 
 }
 
 
 
-/* =========================
-   بررسی دوره آزمایشی
-========================= */
+/* ==================================
+   شمارش دوره آزمایشی
+================================== */
 
-function checkTrial(){
+function updateTrial(){
 
     const start =
-        startTrial();
+        initializeTrial();
+
 
     const now =
-        new Date();
+        Date.now();
 
-    const difference =
-        now.getTime() -
-        start.getTime();
 
-    const totalDays =
-        difference /
-        (1000 * 60 * 60 * 24);
+    const elapsed =
+        now - start;
+
 
     const remaining =
-        TRIAL_DAYS -
-        totalDays;
+        TRIAL_DURATION -
+        elapsed;
 
 
-    const trialText =
+    const text =
         document.getElementById(
             "trialText"
         );
 
 
-    if(remaining > 0){
+    if(remaining <= 0){
 
-        const days =
-            Math.floor(
-                remaining
-            );
-
-        const hours =
-            Math.floor(
-                (remaining - days) * 24
-            );
-
-
-        trialText.innerHTML =
-            "⏳ دوره آزمایشی: " +
-            days +
-            " روز و " +
-            hours +
-            " ساعت باقی مانده";
-
-    }
-
-    else{
-
-        trialText.innerHTML =
+        text.innerHTML =
             "🔒 دوره آزمایشی ۷ روزه تمام شده است";
 
 
@@ -534,33 +507,78 @@ function checkTrial(){
         document.body.style.overflow =
             "hidden";
 
+
+        return false;
+
+    }
+
+
+
+    const days =
+        Math.floor(
+            remaining /
+            (24 * 60 * 60 * 1000)
+        );
+
+
+    const hours =
+        Math.floor(
+
+            (
+                remaining %
+                (24 * 60 * 60 * 1000)
+            )
+            /
+            (60 * 60 * 1000)
+
+        );
+
+
+    text.innerHTML =
+        "⏳ دوره آزمایشی: " +
+        days +
+        " روز و " +
+        hours +
+        " ساعت باقی مانده";
+
+
+    return true;
+
+}
+
+
+
+/* ==================================
+   اطلاعات
+================================== */
+
+function getData(){
+
+    try{
+
+        return JSON.parse(
+
+            localStorage.getItem(
+                DATA_KEY
+            ) || "[]"
+
+        );
+
+    }
+
+    catch(e){
+
+        return [];
+
     }
 
 }
 
 
 
-/* =========================
-   گرفتن اطلاعات
-========================= */
-
-function getData(){
-
-    return JSON.parse(
-
-        localStorage.getItem(
-            DATA_KEY
-        ) || "[]"
-
-    );
-
-}
-
-
-
-/* =========================
-   ذخیره اطلاعات
-========================= */
+/* ==================================
+   ذخیره
+================================== */
 
 function saveData(data){
 
@@ -576,11 +594,18 @@ function saveData(data){
 
 
 
-/* =========================
+/* ==================================
    ثبت درخواست
-========================= */
+================================== */
 
 function addRequest(){
+
+
+    if(!updateTrial()){
+
+        return;
+
+    }
 
 
     const product =
@@ -599,17 +624,21 @@ function addRequest(){
 
     const customers =
         Number(
+
             document
             .getElementById("customers")
             .value
+
         );
 
 
     const profit =
         Number(
+
             document
             .getElementById("profit")
             .value
+
         );
 
 
@@ -692,16 +721,15 @@ function addRequest(){
     .value = "";
 
 
-
     updateApp();
 
 }
 
 
 
-/* =========================
+/* ==================================
    تحلیل محصولات
-========================= */
+================================== */
 
 function analyzeProducts(){
 
@@ -736,7 +764,9 @@ function analyzeProducts(){
 
                 serious:0,
 
-                profit:item.profit,
+                profit:Number(
+                    item.profit || 0
+                ),
 
                 purchaseQty:0,
 
@@ -751,7 +781,9 @@ function analyzeProducts(){
 
 
         groups[key].requests +=
-            Number(item.customers || 0);
+            Number(
+                item.customers || 0
+            );
 
 
 
@@ -772,7 +804,7 @@ function analyzeProducts(){
         if(item.profit){
 
             groups[key].profit =
-                item.profit;
+                Number(item.profit);
 
         }
 
@@ -809,16 +841,15 @@ function analyzeProducts(){
 
 
 
-/* =========================
+/* ==================================
    پیشنهاد خرید
-========================= */
+================================== */
 
 function getRecommendation(){
 
 
     const products =
         analyzeProducts();
-
 
 
     const box =
@@ -846,7 +877,6 @@ function getRecommendation(){
         (a,b) =>
 
         (b.serious * b.profit) -
-
         (a.serious * a.profit)
 
     );
@@ -896,8 +926,7 @@ function getRecommendation(){
         <p>
         سود هر عدد:
         <strong>
-        ${Number(best.profit)
-        .toLocaleString()}
+        ${best.profit.toLocaleString()}
         تومان
         </strong>
         </p>
@@ -986,9 +1015,9 @@ function getRecommendation(){
 
 
 
-/* =========================
+/* ==================================
    نمایش محصولات
-========================= */
+================================== */
 
 function showProducts(){
 
@@ -1165,13 +1194,21 @@ function showProducts(){
 
 
 
-/* =========================
+/* ==================================
    ثبت خرید و فروش
-========================= */
+================================== */
 
 function recordPurchase(
     productName
 ){
+
+
+    if(!updateTrial()){
+
+        return;
+
+    }
+
 
 
     const quantity =
@@ -1285,9 +1322,9 @@ function recordPurchase(
 
 
 
-/* =========================
+/* ==================================
    جلوگیری از مشکل علامت '
-========================= */
+================================== */
 
 function escapeValue(value){
 
@@ -1299,9 +1336,9 @@ function escapeValue(value){
 
 
 
-/* =========================
+/* ==================================
    آمار
-========================= */
+================================== */
 
 function updateStats(){
 
@@ -1377,9 +1414,9 @@ function updateStats(){
 
 
 
-/* =========================
+/* ==================================
    بروزرسانی
-========================= */
+================================== */
 
 function updateApp(){
 
@@ -1393,9 +1430,9 @@ function updateApp(){
 
 
 
-/* =========================
+/* ==================================
    پاک کردن اطلاعات
-========================= */
+================================== */
 
 function clearData(){
 
@@ -1418,19 +1455,27 @@ function clearData(){
 
 
 
-/* =========================
-   شروع
-========================= */
+/* ==================================
+   شروع برنامه
+================================== */
 
-checkTrial();
+updateTrial();
 
 updateApp();
 
 
+/* هر یک دقیقه شمارنده را بررسی کن */
 
-/* =========================
+setInterval(
+    updateTrial,
+    60 * 1000
+);
+
+
+
+/* ==================================
    Service Worker
-========================= */
+================================== */
 
 if(
     "serviceWorker" in navigator
@@ -1451,4 +1496,5 @@ if(
 </script>
 
 </body>
+
 </html>
