@@ -2,123 +2,151 @@
 <html lang="fa" dir="rtl">
 
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0">
 
 <title>دستیار خرید آرایشی</title>
 
+<link rel="manifest" href="manifest.json">
+
+<meta name="theme-color" content="#7c3aed">
+
 <style>
 
+*{
+box-sizing:border-box;
+}
+
 body{
-    margin:0;
-    font-family:Tahoma,Arial;
-    background:#f5f3ff;
-    color:#222;
+margin:0;
+font-family:Tahoma,Arial,sans-serif;
+background:#f5f3ff;
+color:#222;
 }
 
 header{
-    background:#7c3aed;
-    color:white;
-    padding:22px 15px;
-    text-align:center;
+background:#7c3aed;
+color:white;
+padding:22px 15px;
+text-align:center;
 }
 
 header h1{
-    margin:0 0 8px;
-    font-size:22px;
+margin:0 0 8px;
+font-size:22px;
 }
 
 header p{
-    margin:0;
-    font-size:13px;
+margin:0;
+font-size:13px;
 }
 
 .container{
-    max-width:650px;
-    margin:auto;
-    padding:15px;
+max-width:650px;
+margin:auto;
+padding:15px;
 }
 
 .card{
-    background:white;
-    border-radius:16px;
-    padding:18px;
-    margin-bottom:15px;
-    box-shadow:0 3px 12px rgba(0,0,0,.08);
+background:white;
+border-radius:16px;
+padding:18px;
+margin-bottom:15px;
+box-shadow:0 3px 12px rgba(0,0,0,.08);
 }
 
 label{
-    display:block;
-    margin-top:12px;
-    margin-bottom:5px;
-    font-weight:bold;
+display:block;
+margin-top:12px;
+margin-bottom:5px;
+font-weight:bold;
+font-size:14px;
 }
 
-input,select,button{
-    width:100%;
-    padding:13px;
-    border-radius:10px;
-    border:1px solid #ddd;
-    font-size:15px;
+input,
+select,
+button{
+width:100%;
+padding:13px;
+border-radius:10px;
+border:1px solid #ddd;
+font-size:15px;
 }
 
 button{
-    background:#7c3aed;
-    color:white;
-    border:0;
-    margin-top:15px;
-    font-weight:bold;
+background:#7c3aed;
+color:white;
+border:0;
+margin-top:15px;
+font-weight:bold;
 }
 
 .result{
-    background:#f5f3ff;
-    border-radius:12px;
-    padding:15px;
-    margin-top:15px;
+background:#f5f3ff;
+border-radius:12px;
+padding:15px;
+margin-top:15px;
 }
 
 .good{
-    color:#15803d;
-    font-weight:bold;
+color:#15803d;
+font-weight:bold;
 }
 
 .warn{
-    color:#b45309;
-    font-weight:bold;
+color:#b45309;
+font-weight:bold;
 }
 
 .bad{
-    color:#dc2626;
-    font-weight:bold;
+color:#dc2626;
+font-weight:bold;
 }
 
 .stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
+display:grid;
+grid-template-columns:repeat(3,1fr);
+gap:8px;
 }
 
 .stat{
-    background:#f5f3ff;
-    padding:12px 5px;
-    border-radius:10px;
-    text-align:center;
+background:#f5f3ff;
+padding:12px 5px;
+border-radius:10px;
+text-align:center;
 }
 
 .stat b{
-    display:block;
-    font-size:20px;
-    color:#7c3aed;
+display:block;
+font-size:20px;
+color:#7c3aed;
 }
 
 .item{
-    border-bottom:1px solid #eee;
-    padding:12px 0;
+border-bottom:1px solid #eee;
+padding:12px 0;
+}
+
+#installBox{
+display:none;
+background:#ecfdf5;
+border:1px solid #86efac;
+padding:12px;
+border-radius:12px;
+margin-bottom:15px;
+}
+
+.installBtn{
+background:#16a34a;
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -135,6 +163,21 @@ button{
 
 
 <div class="container">
+
+
+<div id="installBox">
+
+📱 می‌توانی برنامه را روی صفحه اصلی گوشی نصب کنی.
+
+<button
+class="installBtn"
+onclick="installApp()">
+
+نصب روی صفحه اصلی
+
+</button>
+
+</div>
 
 
 <div class="card">
@@ -161,6 +204,7 @@ placeholder="مثلاً لافارر">
 <input
 id="customers"
 type="number"
+min="1"
 placeholder="مثلاً 8">
 
 
@@ -169,6 +213,7 @@ placeholder="مثلاً 8">
 <input
 id="profit"
 type="number"
+min="0"
 placeholder="مثلاً 250000">
 
 
@@ -271,6 +316,15 @@ placeholder="مثلاً 250000">
 
 </div>
 
+
+<button
+onclick="clearAll()"
+style="background:#dc2626">
+
+حذف همه اطلاعات
+
+</button>
+
 </div>
 
 
@@ -292,27 +346,32 @@ function saveRequest(){
 
 
 let product =
-document.getElementById("product").value.trim();
+document.getElementById("product")
+.value.trim();
 
 
 let brand =
-document.getElementById("brand").value.trim();
+document.getElementById("brand")
+.value.trim();
 
 
 let customers =
 Number(
-document.getElementById("customers").value
+document.getElementById("customers")
+.value
 );
 
 
 let profit =
 Number(
-document.getElementById("profit").value
+document.getElementById("profit")
+.value
 );
 
 
 let reason =
-document.getElementById("reason").value;
+document.getElementById("reason")
+.value;
 
 
 if(!product || customers <= 0){
@@ -668,6 +727,101 @@ if(reason==="alternative")
 return "محصول جایگزین خرید";
 
 return "فقط پرس‌وجو";
+
+}
+
+
+
+function clearAll(){
+
+if(confirm("همه اطلاعات حذف شود؟")){
+
+data=[];
+
+localStorage.removeItem("beautyData");
+
+analyze();
+
+}
+
+}
+
+
+
+/* نصب روی صفحه اصلی */
+
+let deferredPrompt = null;
+
+
+window.addEventListener(
+"beforeinstallprompt",
+function(e){
+
+e.preventDefault();
+
+deferredPrompt=e;
+
+document.getElementById(
+"installBox"
+).style.display="block";
+
+});
+
+
+async function installApp(){
+
+if(!deferredPrompt){
+
+alert(
+"اگر دکمه نصب نمایش داده نشد، از منوی Chrome گزینه «افزودن به صفحه اصلی» را انتخاب کن."
+);
+
+return;
+
+}
+
+
+deferredPrompt.prompt();
+
+await deferredPrompt.userChoice;
+
+deferredPrompt=null;
+
+document.getElementById(
+"installBox"
+).style.display="none";
+
+}
+
+
+
+/* Service Worker */
+
+if("serviceWorker" in navigator){
+
+window.addEventListener(
+"load",
+function(){
+
+navigator.serviceWorker
+.register("./sw.js")
+.then(function(){
+
+console.log(
+"Service Worker فعال شد"
+);
+
+})
+.catch(function(error){
+
+console.log(
+"Service Worker error:",
+error
+);
+
+});
+
+});
 
 }
 
